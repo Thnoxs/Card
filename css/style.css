@@ -1,0 +1,536 @@
+/* ---
+   1. Global Styles & Variables
+   --- */
+:root {
+    --color-bg: #050709;
+    --color-bg-light: #101216;
+    --color-text-primary: #f0f0f0;
+    --color-text-secondary: #a0a0a0;
+    --color-accent: #c9a474; /* Muted, elegant gold */
+    --color-glass-bg: rgba(16, 18, 22, 0.4); /* Dark, cold glass */
+    --color-glass-border: rgba(255, 255, 255, 0.08);
+    --color-glass-border-hover: rgba(201, 164, 116, 0.3); /* Accent border on hover */
+
+    --font-heading: 'Inter', system-ui, sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* A quick, smooth ease */
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* Required for JS parallax */
+    perspective: 1px;
+    transform-style: preserve-3d;
+    overflow-x: hidden;
+}
+
+/* Base Typography */
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 0;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    text-align: center;
+    margin-bottom: 3.5rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 0;
+}
+
+.active-link{
+    color: #c9a474;
+    border-bottom: 2px solid #c9a474;
+    padding-bottom: 2px;
+}
+/* ---
+   2. Navbar (Header)
+   --- */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1.5rem 5%;
+    
+    /* Initial state: subtle blur */
+    background: rgba(5, 7, 9, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-glass-border);
+    
+    /* Smooth transition for the scroll effect */
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+/* This class is added by JS on scroll */
+.main-header.scrolled {
+    background: rgba(5, 7, 9, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo-text a {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 3rem;
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-links a:hover {
+    color: var(--color-text-primary);
+}
+
+/* Subtle line hover effect */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-accent);
+    transition: width 0.3s ease-out;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* ---
+   3. Hero Section (Cinematic Intro)
+   --- */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    min-height: 600px;
+    padding: 0 2rem;
+    position: relative;
+    
+    /* Soft light effect */
+    background: radial-gradient(circle at 50% 50%, var(--color-bg-light) 0%, var(--color-bg) 60%);
+}
+
+.hero-content {
+    max-width: 900px;
+    /* JS will control transform and opacity for parallax */
+    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+/* Cinematic Fade-In Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-headline {
+    font-size: clamp(2.5rem, 6vw, 5rem); /* Responsive typography */
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    
+    /* Animation */
+    opacity: 0;
+    animation: fadeInUp 1.2s ease-out 0.5s forwards;
+}
+
+.hero-subheadline {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    /* Animation */
+    opacity: 0;
+    animation: fadeInUp 1.2s ease-out 1s forwards;
+}
+
+/* ---
+   4. Projects Section (Glass Grid)
+   --- */
+.projects-section {
+    background-color: var(--color-bg);
+    position: relative;
+    z-index: 2; /* Sits on top of the hero parallax */
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    /* Glassmorphism */
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--color-glass-border);
+    border-radius: 12px;
+    
+    overflow: hidden; /* For border-radius and shine effect */
+    position: relative; /* For shine effect */
+    
+    /* Subtle hover motion */
+    transition: var(--transition-smooth);
+    
+    /* Initial state for scroll-in animation */
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* The class added by JS when in view */
+.project-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered animation delays */
+.project-card:nth-child(2) { transition-delay: 0.1s; }
+.project-card:nth-child(3) { transition-delay: 0.2s; }
+.project-card:nth-child(4) { transition-delay: 0.3s; }
+
+
+.project-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    border-color: var(--color-glass-border-hover);
+}
+
+.project-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--color-glass-border);
+    
+    /* Cinematic de-saturate effect */
+    filter: saturate(0) brightness(0.9);
+    transition: filter 0.5s ease;
+}
+
+.project-card:hover img {
+    filter: saturate(1) brightness(1);
+}
+
+.card-content {
+    padding: 1.5rem 1.75rem;
+}
+
+.card-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Reflection / Shine Hover Effect */
+.project-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 70%;
+    height: 100%;
+    
+    /* The "shine" */
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: left 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.project-card:hover::after {
+    left: 120%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* --------------------- New Minimalist Footer Styling ---------------------- */
+/* -------------------------------------------------------------------------- */
+
+.brand-minimalist-footer {
+    background-color: #090b0f;
+    /* Very dark gray/near black */
+    color: #e0e0e0;
+    /* Light gray text */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.footer-grid-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    /* Three equal columns */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 0 20px 40px;
+    border-bottom: 1px solid #333;
+    /* Subtle separator line */
+}
+
+/* Common Styles for Columns */
+.brand-minimalist-footer h4 {
+    color: #fff;
+    /* Pure white heading */
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* 1. Brand Column */
+.brand-logo-text {
+    font-size: 2.2em;
+    font-weight: 900;
+    /* Extra bold for branding */
+    letter-spacing: 2px;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.footer-col-brand p,
+.footer-col-brand address {
+    font-size: 0.9em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #b0b0b0;
+    /* Subdued gray for body text */
+}
+
+.footer-col-brand a {
+    color: #e0e0e0;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.footer-col-brand a:hover {
+    color: #fff;
+}
+
+/* 2. Navigation Column */
+.footer-col-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col-nav ul a {
+    color: #e0e0e0;
+    text-decoration: none;
+    line-height: 2.2;
+    font-size: 0.9em;
+    display: block;
+    transition: color 0.3s, padding-left 0.3s;
+}
+
+.footer-col-nav ul a:hover {
+    color: #fff;
+    padding-left: 5px;
+    /* Subtle interaction/movement */
+}
+
+/* 3. Social & Legal Column */
+.social-icons-simple {
+    margin-bottom: 30px;
+}
+
+.social-icons-simple a {
+    color: #e0e0e0;
+    font-size: 1.4em;
+    margin-right: 20px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.social-icons-simple a:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.legal-links a {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 0.8em;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+.legal-links a:hover {
+    color: #fff;
+}
+
+/* Copyright Bar */
+.footer-copyright-bottom {
+    text-align: center;
+    padding-top: 15px;
+}
+
+.footer-copyright-bottom p {
+    margin: 0;
+    font-size: 0.75em;
+    color: #777;
+    /* Discreet copyright text */
+    letter-spacing: 0.5px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .footer-grid-wrapper {
+        grid-template-columns: 1fr;
+        /* Single column stack */
+        gap: 30px;
+        text-align: center;
+    }
+
+    .footer-col-nav ul a {
+        padding-left: 0;
+    }
+
+    .footer-col-nav ul a:hover {
+        padding-left: 0;
+    }
+
+    .social-icons-simple {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/* Animated glow hover for links */
+.social-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: var(--color-accent);
+    box-shadow: 0 0 8px 0px var(--color-accent);
+    transition: width 0.4s ease;
+}
+
+.social-links a:hover::after {
+    width: 100%;
+}
+
+.copyright {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+}
+
+/* ---
+   6. Responsive Design
+   --- */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .nav-links li {
+        margin: 0 1rem;
+    }
+    
+    .hero-section {
+        height: 85vh;
+    }
+
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 3rem 0;
+    }
+}
